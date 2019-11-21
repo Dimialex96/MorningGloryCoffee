@@ -1,0 +1,104 @@
+CREATE TABLE manager (
+name VARCHAR(100)  NULL,
+lastname VARCHAR(100)  NULL,
+username VARCHAR(100)  NULL,
+password VARCHAR(100)  NULL,
+AFM INT(11)  NULL,
+AMKA INT(11)  NULL,
+IBAN VARCHAR(27)  NULL,
+PRIMARY KEY (AFM)
+);
+
+CREATE TABLE coffeeshop (
+afmmanag  INT  NULL,
+name VARCHAR(100)  NULL,
+tel INT  NULL,
+address VARCHAR(100),
+income INT,
+location_lat DECIMAL(9,6)  NULL,
+location_long DECIMAL(9,6)  NULL,
+PRIMARY KEY (name),
+CONSTRAINT MANCOF FOREIGN KEY (afmmanag) REFERENCES manager(AFM)
+ON DELETE CASCADE ON UPDATE CASCADE
+);
+
+CREATE TABLE item (
+id INT NOT NULL AUTO_INCREMENT,
+item_name VARCHAR(100)  NULL,
+item_price VARCHAR(100)  NULL,
+item_storage INT  NULL,
+PRIMARY KEY(id)
+);
+
+CREATE TABLE stores (
+id_item INT,
+nameshop VARCHAR(100)  NULL,
+CONSTRAINT COFITEM FOREIGN KEY (id_item) REFERENCES item(id)
+ON DELETE CASCADE ON UPDATE CASCADE,
+CONSTRAINT ITEMCOF FOREIGN KEY (nameshop) REFERENCES coffeeshop(name)
+ON DELETE CASCADE ON UPDATE CASCADE
+);
+
+CREATE TABLE customer (
+email VARCHAR(100)  NULL,
+password VARCHAR(100)  NULL,
+tel INT NOT NULL,
+PRIMARY KEY (email)
+);
+
+CREATE TABLE delivery (
+name VARCHAR(100)  NULL,
+lastname VARCHAR(100)  NULL,
+username VARCHAR(100)  NULL,
+password VARCHAR(100)  NULL,
+AFM INT(11)  NULL,
+AMKA INT(11)  NULL,
+IBAN VARCHAR(27)  NULL,
+location_lat DECIMAL(9,6)  NULL,
+location_long DECIMAL(9,6)  NULL,
+availability VARCHAR(100) NULL
+onduty TIME,
+offduty TIME,
+hoursworked FLOAT(4,2),
+klm FLOAT(5,2),
+PRIMARY KEY (AFM)
+);
+
+CREATE TABLE myorder (
+email_customer VARCHAR (100) NULL,
+id INT NOT NULL AUTO_INCREMENT,
+ellinikos INT(11) NULL,
+frape INT(11) NULL,
+espresso INT(11) NULL,
+cappuccino INT(11) NULL,
+filtrou INT(11) NULL,
+tiropita INT(11) NULL,
+xortopita INT(11) NULL,
+koulouri INT(11) NULL,
+tost INT(11) NULL,
+keik INT(11) NULL,
+location_lat DECIMAL(9,6)  NULL,
+location_long DECIMAL(9,6)  NULL,
+PRIMARY KEY(id)
+FOREIGN KEY (email_customer) REFERENCES customer(email)
+ON DELETE CASCADE ON UPDATE CASCADE;
+);
+
+CREATE TABLE orderlist (
+order_id INT,
+shopname VARCHAR(100),
+CONSTRAINT COFOR FOREIGN KEY (order_id) REFERENCES myorder(id)
+ON DELETE CASCADE ON UPDATE CASCADE,
+CONSTRAINT ORCOF FOREIGN KEY (shopname) REFERENCES coffeeshop(name)
+ON DELETE CASCADE ON UPDATE CASCADE
+);
+
+CREATE TABLE takenby (
+afmdelivery INT(11),
+id_order INT,
+CONSTRAINT ORDEL FOREIGN KEY (id_order) REFERENCES myorder(id)
+ON DELETE CASCADE ON UPDATE CASCADE,
+CONSTRAINT DELOR FOREIGN KEY (afmdelivery) REFERENCES delivery(AFM)
+ON DELETE CASCADE ON UPDATE CASCADE
+);
+
